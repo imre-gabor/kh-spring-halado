@@ -16,5 +16,7 @@
         <module>flights-api</module>
         <module>token</module>
         <module>config</module>
+        <module>discovery</module>
+        <module>gateway</module>
     </modules>
 </project>
