@@ -166,7 +166,7 @@ public class JwtFilter implements GlobalFilter{
                 ServerHttpRequest requestWithCustomHeaders = request
                 	.mutate()
                 	.header("x-jwt-username", userName)
-                	.header("x-hwt-auth", authCsv)
+                	.header("x-jwt-auth", authCsv)
                 	.build();
                 
                 exchange = exchange
