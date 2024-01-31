@@ -6,12 +6,9 @@ import com.khb.hu.springcourse.hr.model.Employee;
 import com.khb.hu.springcourse.hr.repository.AddressRepository;
 import com.khb.hu.springcourse.hr.repository.CompanyRepository;
 import com.khb.hu.springcourse.hr.repository.EmployeeRepository;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.khb.hu.springcourse.hr.util.IntegrationTestBase;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -23,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

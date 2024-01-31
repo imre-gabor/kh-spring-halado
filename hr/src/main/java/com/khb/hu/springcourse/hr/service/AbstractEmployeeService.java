@@ -1,11 +1,9 @@
 package com.khb.hu.springcourse.hr.service;
 
 import com.google.common.io.ByteStreams;
-import com.khb.hu.springcourse.hr.api.model.EmployeeDto;
 import com.khb.hu.springcourse.hr.model.Employee;
 import com.khb.hu.springcourse.hr.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.persistence.EntityManager;
@@ -16,9 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
