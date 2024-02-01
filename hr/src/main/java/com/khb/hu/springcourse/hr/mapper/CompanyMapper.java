@@ -26,4 +26,6 @@ public interface CompanyMapper {
     @Mapping(target = "employees", ignore = true)
     @Mapping(target = "addresses", ignore = true)
     CompanyDto companyToDtoSummary(Company company);
+
+    List<CompanyDto> companiesToDtoSummaries(List<Company> company);
 }

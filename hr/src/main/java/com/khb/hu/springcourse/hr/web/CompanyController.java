@@ -98,4 +98,14 @@ public class CompanyController implements CompanyControllerApi {
 
     }
 
+    @PostMapping("/api/companies/search2")
+    public ResponseEntity<List<CompanyDto>> search2(@RequestBody CompanyDto example){
+        List<CompanyDto> result =
+            companyMapper.companiesToDtoSummaries(
+                companyService.findByExampleWithQuerydsl(companyMapper.dtoToCompany(example)));
+
+        return ResponseEntity
+                .ok(result);
+    }
+
 }

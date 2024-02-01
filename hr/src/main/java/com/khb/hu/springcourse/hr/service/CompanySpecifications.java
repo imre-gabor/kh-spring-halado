@@ -26,7 +26,7 @@ public class CompanySpecifications {
                 date.withDayOfMonth(1), getLastDayOfMonth(date));
     }
 
-    private static LocalDate getLastDayOfMonth(LocalDate date) {
+    public static LocalDate getLastDayOfMonth(LocalDate date) {
         return date.withDayOfMonth(date.getMonth().length(date.isLeapYear()));
     }
 

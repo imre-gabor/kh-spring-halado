@@ -174,12 +174,34 @@ class CompanyServiceIT extends IntegrationTestBase {
 
         Company example = new Company("ny");
         example.setEmployees(Arrays.asList(new Employee(null, "John", null, 0.0, null)));
+        List<Company> found = companyService.findByExampleWithQuerydsl(example);
+
+        assertThat(found).containsExactly(companies.get(0));
+        Assertions.assertThrows(LazyInitializationException.class,
+                () -> found.get(0).getEmployees().iterator());
+    }
+
+    @Test
+    void findByExampleWithQuerydsl_ByNameAndEmployeeName_LazyFetch() {
+        List<Company> companies = saveDefaultTestCompanies();
+
+        saveNewEmployeeForCompany("John Wayne",
+                LocalDate.of(2021, 10, 1),
+                companies.get(0));
+
+        saveNewEmployeeForCompany("Bruce Wayne",
+                LocalDate.of(2021, 10, 1),
+                companies.get(1));
+
+        Company example = new Company("ny");
+        example.setEmployees(Arrays.asList(new Employee(null, "John", null, 0.0, null)));
         List<Company> found = companyService.findByExampleWithSpecification(example);
 
         assertThat(found).containsExactly(companies.get(0));
         Assertions.assertThrows(LazyInitializationException.class,
                 () -> found.get(0).getEmployees().iterator());
     }
+
 
     @Test
     void findByExampleWithSpecification_ByNameAndEmployeeName_WithFetchingEmployeesOnly() {

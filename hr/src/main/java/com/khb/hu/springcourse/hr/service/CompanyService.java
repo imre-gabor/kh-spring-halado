@@ -1,9 +1,13 @@
 package com.khb.hu.springcourse.hr.service;
 
+import com.google.common.collect.Lists;
 import com.khb.hu.springcourse.hr.model.Company;
 import com.khb.hu.springcourse.hr.model.Employee;
+import com.khb.hu.springcourse.hr.model.QCompany;
 import com.khb.hu.springcourse.hr.repository.CompanyRepository;
 import com.khb.hu.springcourse.hr.repository.EmployeeRepository;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
@@ -27,6 +31,7 @@ import jakarta.transaction.Transactional;
 import static com.khb.hu.springcourse.hr.service.CompanySpecifications.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -79,6 +84,42 @@ public class CompanyService {
 
         return companyRepository.findAll(spec);
     }
+
+    public List<Company> findByExampleWithQuerydsl(Company company) {
+        Integer id = company.getId();
+        String name = company.getName();
+
+        QCompany qCompany = QCompany.company;
+        List<Predicate> predicates = new ArrayList<>();
+
+        if(id != null){
+            predicates.add(qCompany.id.eq(id));
+        }
+
+        if(StringUtils.hasLength(name)){
+            predicates.add(qCompany.name.contains(name));
+        }
+
+        if(!CollectionUtils.isEmpty(company.getEmployees())) {
+            Employee employee = company.getEmployees().get(0);
+            String employeeName = employee.getName();
+            LocalDate employeeWorkStart = employee.getWorkStart();
+
+            if(StringUtils.hasLength(employeeName)){
+                predicates.add(qCompany.employees.any().name.startsWith(employeeName));
+            }
+            if(employeeWorkStart != null){
+                predicates.add(qCompany.employees.any().workStart.between(
+                        employeeWorkStart.withDayOfMonth(1),
+                        CompanySpecifications.getLastDayOfMonth(employeeWorkStart)
+                ));
+            }
+        }
+
+        return predicates.isEmpty() ? companyRepository.findAll()
+            : Lists.newArrayList(companyRepository.findAll(ExpressionUtils.allOf(predicates)));
+    }
+
 
     public List<Company> findByExampleWithSpecificationAndEntityGraph(Company company, String entityGraphName) {
         Integer id = company.getId();
