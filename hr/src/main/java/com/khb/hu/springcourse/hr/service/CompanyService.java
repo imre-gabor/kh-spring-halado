@@ -302,6 +302,17 @@ public class CompanyService {
     }
 
     @Transactional
+    public Page<Company> findByExampleWithQuerydslPagedAndFetchAllRelationships(Predicate predicate, Pageable pageable) {
+
+        Page<Company> page = companyRepository.findAll(predicate, pageable);
+        List<Integer> ids = page.getContent().stream().map(Company::getId).toList();
+        companyRepository.findByIdInWithEmployees(ids);
+        companyRepository.findByIdInWithAddresses(ids);
+
+        return page;
+    }
+
+    @Transactional
     public Company addEmployee(int id, Employee employee) {
         Company company = companyRepository.findById(id).get();
         Employee savedEmployee = employeeRepository.save(employee);

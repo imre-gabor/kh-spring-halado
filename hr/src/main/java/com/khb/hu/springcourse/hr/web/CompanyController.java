@@ -1,5 +1,6 @@
 package com.khb.hu.springcourse.hr.web;
 
+import com.google.common.collect.Lists;
 import com.khb.hu.springcourse.hr.api.CompanyControllerApi;
 import com.khb.hu.springcourse.hr.api.model.CompanyDto;
 import com.khb.hu.springcourse.hr.api.model.EmployeeDto;
@@ -8,16 +9,15 @@ import com.khb.hu.springcourse.hr.mapper.EmployeeMapper;
 import com.khb.hu.springcourse.hr.model.Company;
 import com.khb.hu.springcourse.hr.repository.CompanyRepository;
 import com.khb.hu.springcourse.hr.service.CompanyService;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -103,6 +103,19 @@ public class CompanyController implements CompanyControllerApi {
         List<CompanyDto> result =
             companyMapper.companiesToDtoSummaries(
                 companyService.findByExampleWithQuerydsl(companyMapper.dtoToCompany(example)));
+
+        return ResponseEntity
+                .ok(result);
+    }
+
+    @GetMapping("/api/companies/search3")
+    public ResponseEntity<List<CompanyDto>> search3(
+            @QuerydslPredicate(root = Company.class) Predicate predicate,
+            @SortDefault("id") Pageable pageable
+    ){
+        List<CompanyDto> result =
+                companyMapper.companiesToDtos(Lists.newArrayList(
+                        companyService.findByExampleWithQuerydslPagedAndFetchAllRelationships(predicate, pageable)));
 
         return ResponseEntity
                 .ok(result);
