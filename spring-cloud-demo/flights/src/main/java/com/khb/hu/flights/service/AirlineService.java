@@ -3,6 +3,8 @@ package com.khb.hu.flights.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.khb.hu.flights.dto.Airline;
@@ -19,6 +21,7 @@ public class AirlineService {
     );
 
     public List<Airline> search(String from, String to) {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return airlines.stream()
                 .filter(a -> a.getFrom().equals(from) 
                         && a.getTo().equals(to))
