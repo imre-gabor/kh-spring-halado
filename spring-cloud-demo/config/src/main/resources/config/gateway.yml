@@ -20,6 +20,7 @@ spring:
             - Path=/flights/**
           filters:
             - RewritePath=/flights(?<segment>/?.*), /api$\{segment}
+            - CircuitBreaker=flights
         - id: token
           uri: lb://token
           predicates:

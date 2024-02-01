@@ -4,6 +4,7 @@ import com.khb.hu.flights.api.FlightsApi;
 import com.khb.hu.flights.dto.Airline;
 import com.khb.hu.flights.service.AirlineService;
 
+import java.time.Duration;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,11 @@ public class FlightsController implements FlightsApi {
     
     @Override
     public List<Airline> searchFlight(String from, String to) {
-    	System.out.println(request.getHeader("x-jwt-username"));
+//        try {
+//            Thread.sleep(Duration.ofMinutes(1));
+//        } catch (InterruptedException e) {
+//        }
+        System.out.println(request.getHeader("x-jwt-username"));
         return airlineService.search(from, to);
     }
 }
