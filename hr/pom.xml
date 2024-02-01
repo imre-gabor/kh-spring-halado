@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>3.2.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.khb.hu.springcourse</groupId>
@@ -14,7 +14,7 @@
 	<name>hr</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
@@ -50,8 +50,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.12</version>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.3.0</version>
 		</dependency>
 
 		<dependency>
@@ -99,7 +99,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.2.1</version>
+				<version>6.3.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -111,6 +111,7 @@
 							<configOptions>
 								<useTags>true</useTags>
 								<dateLibrary>java8-datetime</dateLibrary>
+								<useSpringBoot3>true</useSpringBoot3>
 								<configPackage>com.khb.hu.springcourse.hr.config</configPackage>
 								<apiPackage>com.khb.hu.springcourse.hr.api</apiPackage>
 								<modelPackage>com.khb.hu.springcourse.hr.api.model</modelPackage>

@@ -1,6 +1,6 @@
 package com.khb.hu.springcourse.hr.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
