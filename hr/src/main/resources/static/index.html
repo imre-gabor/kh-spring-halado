@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    Employee id: <input id="employeeId"/><br>
+    <button id="okBtn">OK</button>
+    <div id="name"></div>
+    <div id="salary"></div>
+
+
+    <!--
+        JSPM Generator Import Map
+        Edit URL: https://generator.jspm.io/#U2NgYGBkDM0rySzJSU1hcCguyc8t0AeTWcUO5noGega6SakliaYAYTzJAykA
+      -->
+    <script type="importmap">
+        {
+          "imports": {
+            "@stomp/stompjs": "https://ga.jspm.io/npm:@stomp/stompjs@7.0.0/esm6/index.js"
+          }
+        }
+    </script>
+
+    <!-- ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+) -->
+    <script
+            async
+            src="https://ga.jspm.io/npm:es-module-shims@1.5.1/dist/es-module-shims.js"
+            crossorigin="anonymous"
+    ></script>
+
+    <script type="module">
+        import { Client } from '@stomp/stompjs';
+
+        var empId = null;
+        var subscription = null;
+        var client = null;
+
+        document.getElementById('okBtn').addEventListener(
+            'click',
+            async (e) => {
+                empId = document.getElementById('employeeId').value;
+                const response = await fetch('/api/employees/' + empId);
+                const empData = await response.json();
+                updateEmpData(empData);
+                if(subscriptionId) {
+                    subscription.unsubscribe();
+                }
+                subscribe();
+            }
+
+        );
+
+        function subscribe() {
+            if(client == null) {
+                client = new Client({
+                  brokerURL: 'ws://localhost:8080/api/stomp',
+                  onConnect: () => {
+                    subscribeToChanges();
+                  },
+                });
+
+                client.activate();
+            } else {
+                subscribeToChanges();
+            }
+        }
+
+        function subscribeToChanges() {
+            subscription = client.subscribe('/topic/employees/' + empId, message =>
+                updateEmpData(JSON.parse(message.body))
+            );
+        }
+
+        function updateEmpData(empData) {
+            document.getElementById('name').innerHTML = empData.name;
+            document.getElementById('salary').innerHTML = empData.salary;
+        }
+
+
+    </script>
+
+
+</body>
+</html>
