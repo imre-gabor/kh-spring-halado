@@ -8,6 +8,7 @@
 
     Employee id: <input id="employeeId"/><br>
     <button id="okBtn">OK</button>
+    <button id="increaseBtn">Increase salary</button>
     <div id="name"></div>
     <div id="salary"></div>
 
@@ -37,20 +38,32 @@
         var empId = null;
         var subscription = null;
         var client = null;
+        var empData = null;
+
+
+        document.getElementById('increaseBtn').addEventListener(
+            'click',
+            async (e) => {
+                if(empData) {
+                    empData.salary = (empData.salary + 10000);
+                    client.publish({destination: "/app/employees/modify", body: JSON.stringify(empData) });
+                }
+            }
+        );
+
 
         document.getElementById('okBtn').addEventListener(
             'click',
             async (e) => {
                 empId = document.getElementById('employeeId').value;
                 const response = await fetch('/api/employees/' + empId);
-                const empData = await response.json();
+                empData = await response.json();
                 updateEmpData(empData);
-                if(subscriptionId) {
+                if(subscription) {
                     subscription.unsubscribe();
                 }
                 subscribe();
             }
-
         );
 
         function subscribe() {
