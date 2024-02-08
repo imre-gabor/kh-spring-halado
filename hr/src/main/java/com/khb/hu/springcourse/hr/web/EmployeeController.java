@@ -9,6 +9,7 @@ import com.khb.hu.springcourse.hr.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,9 @@ public class EmployeeController implements EmployeeControllerApi {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
@@ -71,7 +75,10 @@ public class EmployeeController implements EmployeeControllerApi {
         employeeDto.setId(id);
         Employee modifiedEmployee = employeeService.modify(employeeMapper.dtoToEmployee(employeeDto));
         if(modifiedEmployee != null) {
-            return ResponseEntity.ok(employeeMapper.employeeToDto(modifiedEmployee));
+
+            EmployeeDto modifiedDto = employeeMapper.employeeToDto(modifiedEmployee);
+            simpMessagingTemplate.convertAndSend("/topic/employees/" + id, modifiedDto);
+            return ResponseEntity.ok(modifiedDto);
         } else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
